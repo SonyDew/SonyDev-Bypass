@@ -35,7 +35,6 @@ The software constantly checks for new versions and ensures you're always up to 
 
 ## ⚠️ Important Notes
 - **Disable Antivirus Before Running** – Some files may be flagged as false positives.
-- **Large Game Files** – Files larger than **100MB** must be downloaded separately via **Google Drive**.
 
 For questions or suggestions, feel free to create an issue on [GitHub](https://github.com/SonyCapone/SonyDev-Bypass/issues). Stay ahead of the game with SonyDev-Bypass! 🎮🔥
 
