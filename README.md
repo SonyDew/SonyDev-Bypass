@@ -1,9 +1,9 @@
 # SonyDev-Bypass
 
-SonyDev-Bypass is a powerful tool designed to bypass certain restrictions in games. Initially tested on **Windows 11**, it now fully supports **Windows 10** and **Windows 7**.
+SonyDev-Bypass is a powerful tool designed to bypass certain restrictions in games. Initially tested on **Windows 11**, it now fully supports **Windows 10**.
 
 ## 🚀 Key Features
-- **Multi-language Support** – Choose from English, Russian, Spanish, Chinese, French, German, Italian, Portuguese, Japanese, and Korean.
+- **Multi-language Support** – Choose from English, Russian, Ukrainian, Spanish, Chinese, French, German, Italian, Portuguese, Japanese, and Korean.
 - **Sleek Modern UI** – Enhanced interface with smooth animations and intuitive navigation.
 - **Optimized Compatibility** – Improved support for various games and systems.
 - **Auto-Update System** – Automatically checks for the latest version and applies updates seamlessly.
