@@ -1,0 +1,657 @@
+<Window x:Class="SonyDevBypass.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}"
+        Width="1320"
+        Height="1000"
+        Closing="Window_Closing"
+        Loaded="Window_Loaded"
+        SourceInitialized="Window_SourceInitialized"
+        Icon="Assets/icon.ico"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True"
+        TextOptions.TextHintingMode="Fixed"
+        TextOptions.TextFormattingMode="Display"
+        WindowStartupLocation="Manual"
+        WindowStyle="None">
+    <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+    <Grid Width="1320" Height="1000">
+        <Border Margin="10" Background="#18080502" CornerRadius="34" Opacity="0.36" />
+        <Border Margin="13" Background="#26000000" CornerRadius="31" Opacity="0.32" />
+
+        <Border Margin="16" Background="{StaticResource WindowGradientBrush}" BorderBrush="{StaticResource SoftBorderBrush}" BorderThickness="1" CornerRadius="28">
+            <Border.Clip>
+                <RectangleGeometry Rect="0,0,1288,968" RadiusX="28" RadiusY="28" />
+            </Border.Clip>
+            <Grid ClipToBounds="True">
+                <Rectangle Fill="{StaticResource WarmAtmosphereBrush}" IsHitTestVisible="False" Opacity="0.34" />
+                <Rectangle IsHitTestVisible="False" Opacity="0.22">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#0CFF8A2B" Offset="0" />
+                            <GradientStop Color="#14FFB25E" Offset="0.46" />
+                            <GradientStop Color="#08FF8A2B" Offset="0.82" />
+                            <GradientStop Color="#00000000" Offset="1" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Canvas IsHitTestVisible="False" Opacity="0.72">
+                    <Ellipse Width="760" Height="760" Canvas.Left="-160" Canvas.Top="-120" Opacity="0.22">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush GradientOrigin="0.46,0.44">
+                                <GradientStop Color="#48FF9B3A" Offset="0" />
+                                <GradientStop Color="#14FF8A2B" Offset="0.42" />
+                                <GradientStop Color="#00FF8A2B" Offset="1" />
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="960" Height="720" Canvas.Left="380" Canvas.Top="-40" Opacity="0.18">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush GradientOrigin="0.5,0.42">
+                                <GradientStop Color="#40FFB562" Offset="0" />
+                                <GradientStop Color="#12FF8A2B" Offset="0.44" />
+                                <GradientStop Color="#00FF8A2B" Offset="1" />
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="860" Height="620" Canvas.Left="280" Canvas.Top="610" Opacity="0.14">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush GradientOrigin="0.5,0.48">
+                                <GradientStop Color="#34FFAA54" Offset="0" />
+                                <GradientStop Color="#10FF8A2B" Offset="0.46" />
+                                <GradientStop Color="#00FF8A2B" Offset="1" />
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Border Width="1040" Height="260" Canvas.Left="140" Canvas.Top="72" CornerRadius="130" Opacity="0.08">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#00FFFFFF" Offset="0" />
+                                <GradientStop Color="#14FFFFFF" Offset="0.36" />
+                                <GradientStop Color="#05FFD7B0" Offset="0.6" />
+                                <GradientStop Color="#00FFFFFF" Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                </Canvas>
+                <Rectangle Fill="{StaticResource GlassOverlayBrush}" IsHitTestVisible="False" Opacity="0.34" />
+
+                <Grid Margin="18">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="52" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Padding="14,8" HorizontalAlignment="Left" Background="#1C1F24" BorderBrush="#43474F" BorderThickness="1" CornerRadius="16">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="10" Height="10" Margin="0,0,10,0" VerticalAlignment="Center" Background="{StaticResource AccentBrush}" CornerRadius="5" />
+                            <TextBlock VerticalAlignment="Center" FontSize="15" FontWeight="SemiBold" Text="{Binding TitleText}" />
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Button Style="{StaticResource ChromeButtonStyle}" Click="MinimizeButton_Click" Content="&#x2013;" />
+                        <Button Style="{StaticResource ChromeButtonStyle}" Click="CloseButton_Click" Content="&#x2715;" />
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="1" Margin="0,20,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="352" />
+                        <ColumnDefinition Width="22" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}" Background="{StaticResource HeroGradientBrush}">
+                        <Grid Margin="22,20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Border Padding="10,5" HorizontalAlignment="Left" Background="#5A3A24" BorderBrush="#8D603D" BorderThickness="1" CornerRadius="10">
+                                <TextBlock Foreground="#F7D4B5" FontSize="11" FontWeight="SemiBold" Text="{Binding LiveCatalogBadgeText}" />
+                            </Border>
+
+                            <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                                <TextBlock FontSize="34" FontWeight="SemiBold" LineHeight="38" Text="{Binding TitleText}" TextWrapping="Wrap" />
+                                <TextBlock Width="258" Margin="0,10,0,0" Foreground="{StaticResource MutedStrongBrush}" FontSize="15" LineHeight="23" Text="{Binding HeroTagline}" TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <Border Grid.Row="2" Margin="0,20,0,0" Padding="16" Style="{StaticResource MetricCardBorderStyle}">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource SectionLabelStyle}" Text="{Binding WorkflowTitle}" />
+                                    <StackPanel Margin="0,14,0,0">
+                                        <Grid Margin="0,0,0,12">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="28" Height="28" Background="#252A32" BorderBrush="#525963" BorderThickness="1" CornerRadius="14">
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" Text="1" />
+                                            </Border>
+                                            <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                                <TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding DirectoryPanelTitle}" />
+                                                <TextBlock Margin="0,4,0,0" Style="{StaticResource SectionLabelStyle}" Text="{Binding DirectoryHint}" />
+                                            </StackPanel>
+                                        </Grid>
+                                        <Grid Margin="0,0,0,12">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="28" Height="28" Background="#252A32" BorderBrush="#525963" BorderThickness="1" CornerRadius="14">
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" Text="2" />
+                                            </Border>
+                                            <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                                <TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding CatalogPanelTitle}" />
+                                                <TextBlock Margin="0,4,0,0" Style="{StaticResource SectionLabelStyle}" Text="{Binding SearchLabelText}" />
+                                            </StackPanel>
+                                        </Grid>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="28" Height="28" Background="{StaticResource AccentSoftBrush}" BorderBrush="#9E6B44" BorderThickness="1" CornerRadius="14">
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" Text="3" />
+                                            </Border>
+                                            <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                                <TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding StartButtonText}" />
+                                                <TextBlock Margin="0,4,0,0" Style="{StaticResource SectionLabelStyle}" Text="{Binding FooterNoteText}" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <StackPanel Grid.Row="3" Margin="0,16,0,0">
+                                <Border Padding="14" Style="{StaticResource MetricCardBorderStyle}">
+                                    <StackPanel>
+                                        <TextBlock Style="{StaticResource SectionLabelStyle}" Text="{Binding BuildPanelTitle}" />
+                                        <TextBlock Margin="0,8,0,0" Style="{StaticResource MetricValueStyle}" FontSize="15" Text="{Binding CurrentVersionText}" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Margin="0,10,0,0" Padding="14" Style="{StaticResource MetricCardBorderStyle}">
+                                    <StackPanel>
+                                        <TextBlock Style="{StaticResource SectionLabelStyle}" Text="{Binding UpdatePanelTitle}" />
+                                        <TextBlock Margin="0,8,0,0" Style="{StaticResource MetricValueStyle}" FontSize="15" Text="{Binding UpdateSummary}" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Margin="0,10,0,0" Style="{StaticResource StatusPillBorderStyle}">
+                                    <TextBlock Foreground="{StaticResource MutedStrongBrush}" FontSize="12" Text="{Binding GameCountText}" />
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="4" Margin="0,14,0,0">
+                                <Button Height="42" Margin="0,0,0,8" Command="{Binding CheckForUpdatesCommand}" Content="{Binding CheckForUpdatesText}" Style="{StaticResource SecondaryButtonStyle}" />
+                                <Button Height="40" Command="{Binding OpenDiscordCommand}" Content="{Binding DiscordButtonText}" Style="{StaticResource PillButtonStyle}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="18" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="18" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="260" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Style="{StaticResource CardBorderStyle}">
+                                <Grid Margin="20">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="12" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Style="{StaticResource HeaderIconBorderStyle}">
+                                                <Path HorizontalAlignment="Center" VerticalAlignment="Center" Data="{StaticResource FolderIconGeometry}" Style="{StaticResource HeaderIconPathStyle}" />
+                                            </Border>
+                                            <StackPanel Margin="12,0,0,0">
+                                                <TextBlock Style="{StaticResource SectionTitleStyle}" Text="{Binding DirectoryPanelTitle}" />
+                                                <TextBlock Margin="0,6,0,0" Style="{StaticResource SectionLabelStyle}" FontSize="13" Text="{Binding DirectoryHint}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <Border Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource StepPillBorderStyle}">
+                                            <TextBlock Foreground="{StaticResource MutedStrongBrush}" FontSize="11" FontWeight="SemiBold" Text="01" />
+                                        </Border>
+                                    </Grid>
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="12" />
+                                            <ColumnDefinition Width="148" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Height="46" IsReadOnly="True" IsEnabled="{Binding CanChangeInputs}" Text="{Binding DownloadDirectory}" />
+                                        <Button Grid.Column="2" Height="46" Command="{Binding BrowseFolderCommand}" Content="{Binding BrowseButtonText}" Style="{StaticResource SecondaryButtonStyle}" />
+                                    </Grid>
+                                </Grid>
+                            </Border>
+
+                            <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                                <Grid Margin="20">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="12" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Style="{StaticResource HeaderIconBorderStyle}">
+                                            <Path HorizontalAlignment="Center" VerticalAlignment="Center" Data="{StaticResource LanguageIconGeometry}" Style="{StaticResource HeaderIconPathStyle}" />
+                                        </Border>
+                                        <StackPanel Margin="12,0,0,0">
+                                            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="{Binding LanguagePanelTitle}" />
+                                            <TextBlock Margin="0,6,0,0" Style="{StaticResource SectionLabelStyle}" FontSize="13" Text="{Binding SelectLanguageText}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <TextBlock Grid.Row="1" />
+                                    <StackPanel Grid.Row="2">
+                                        <ComboBox Height="46" Margin="0,2,0,0" DisplayMemberPath="DisplayName" IsEnabled="{Binding CanChangeInputs}" ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}" TextSearch.TextPath="DisplayName" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Row="2" Style="{StaticResource CardBorderStyle}">
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="14" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Style="{StaticResource HeaderIconBorderStyle}">
+                                            <Path HorizontalAlignment="Center" VerticalAlignment="Center" Data="{StaticResource CatalogIconGeometry}" Style="{StaticResource HeaderIconPathStyle}" />
+                                        </Border>
+                                        <StackPanel Margin="12,0,0,0">
+                                            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="{Binding CatalogPanelTitle}" />
+                                            <TextBlock Margin="0,6,0,0" Style="{StaticResource SectionLabelStyle}" FontSize="13" Text="{Binding GameCountText}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <Border Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource StatusPillBorderStyle}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Width="8" Height="8" Margin="0,0,8,0" VerticalAlignment="Center" Background="{StaticResource SuccessBrush}" CornerRadius="4" />
+                                            <TextBlock Foreground="{StaticResource MutedStrongBrush}" FontSize="12" Text="{Binding CatalogStatusMessage}" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Button Grid.Column="3" Width="136" Height="44" VerticalAlignment="Center" Command="{Binding RefreshGamesCommand}" Content="{Binding RefreshCatalogText}" Style="{StaticResource SecondaryButtonStyle}" />
+                                </Grid>
+
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="18" />
+                                        <ColumnDefinition Width="244" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <TextBlock Style="{StaticResource SectionLabelStyle}" FontSize="13" Text="{Binding SearchLabelText}" />
+                                        <TextBox Height="46" Margin="0,10,0,0" IsEnabled="{Binding CanRefreshGames}" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <Border Grid.Column="2" Padding="16" Style="{StaticResource MetricCardBorderStyle}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource SectionLabelStyle}" Text="{Binding SelectedGameLabel}" />
+                                            <TextBlock Margin="0,8,0,0"
+                                                       Style="{StaticResource MetricValueStyle}"
+                                                       FontSize="15"
+                                                       Text="{Binding SelectedGameDisplayText}"
+                                                       TextWrapping="NoWrap"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       ToolTip="{Binding SelectedGame}" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+
+                                <Grid Grid.Row="4">
+                                    <Border Background="#121417" BorderBrush="#383C43" BorderThickness="1" CornerRadius="12">
+                                        <Grid>
+                                            <ListBox Padding="8" Background="Transparent" BorderThickness="0" ItemsSource="{Binding FilteredGames}" SelectedItem="{Binding SelectedGame}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid Margin="2,1">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock
+                                                                       VerticalAlignment="Center"
+                                                                       FontSize="14"
+                                                                       FontWeight="SemiBold"
+                                                                       Text="{Binding}"
+                                                                       TextTrimming="CharacterEllipsis" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+
+                                            <Border Background="#DD15171A"
+                                                    BorderBrush="#3C4047"
+                                                    BorderThickness="1"
+                                                    CornerRadius="18"
+                                                    Visibility="{Binding IsLoadingGames, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <StackPanel Margin="18" VerticalAlignment="Center">
+                                                    <TextBlock Style="{StaticResource SectionLabelStyle}" FontSize="13" HorizontalAlignment="Center" Text="{Binding LoadingGamesText}" />
+                                                    <ProgressBar Height="10" Margin="0,12,0,0" IsIndeterminate="True" />
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="4" Style="{StaticResource CardBorderStyle}">
+                            <Grid Margin="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="18" />
+                                    <ColumnDefinition Width="250" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="16" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="14" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Style="{StaticResource HeaderIconBorderStyle}" Background="#241F1A" BorderBrush="#7D6147">
+                                                <Path HorizontalAlignment="Center" VerticalAlignment="Center" Data="{StaticResource StartIconGeometry}" Style="{StaticResource HeaderIconPathStyle}" Stroke="{StaticResource AccentBrush}" />
+                                            </Border>
+                                            <StackPanel Margin="12,0,0,0">
+                                                <TextBlock Style="{StaticResource SectionTitleStyle}" Text="{Binding StartSectionTitle}" />
+                                                <TextBlock Margin="0,6,0,0" Style="{StaticResource SectionLabelStyle}" FontSize="13" Text="{Binding FooterNoteText}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <Border Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource StepPillBorderStyle}">
+                                            <TextBlock Foreground="{StaticResource MutedStrongBrush}" FontSize="11" FontWeight="SemiBold" Text="03" />
+                                        </Border>
+                                    </Grid>
+
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="14" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Border Padding="16,14" Style="{StaticResource MetricCardBorderStyle}">
+                                            <StackPanel>
+                                                <TextBlock Style="{StaticResource SectionLabelStyle}" Text="{Binding StatusPanelTitle}" />
+                                                <Border Margin="0,10,0,0" HorizontalAlignment="Left" Style="{StaticResource StatusPillBorderStyle}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Border Width="8" Height="8" Margin="0,0,8,0" VerticalAlignment="Center" Background="{StaticResource SuccessBrush}" CornerRadius="4" />
+                                                        <TextBlock Foreground="{StaticResource MutedStrongBrush}" FontSize="12" Text="{Binding StatusMessage}" />
+                                                    </StackPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="2" Padding="16,14" Style="{StaticResource MetricCardBorderStyle}">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="10" />
+                                                    <RowDefinition Height="24" />
+                                                    <RowDefinition Height="20" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Style="{StaticResource SectionLabelStyle}" Text="{Binding ProgressPanelTitle}" />
+                                                <TextBlock Grid.Row="2" Style="{StaticResource ProgressMetricTextStyle}" Text="{Binding ProgressPrimaryText}" />
+                                                <TextBlock Grid.Row="3" Style="{StaticResource ProgressMetricTextSecondaryStyle}" Text="{Binding ProgressSecondaryText}" />
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+
+                                    <ProgressBar Grid.Row="4" VerticalAlignment="Top" Maximum="1" Value="{Binding ProgressValue, Mode=OneWay}" />
+                                </Grid>
+
+                                <Border Grid.Column="2" Padding="16" Background="#181A1E" BorderBrush="#484C54" BorderThickness="1" CornerRadius="18">
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Style="{StaticResource SectionLabelStyle}" Text="{Binding ReadyWhenSelectedText}" />
+                                        <Button Height="60" Margin="0,14,0,10" Command="{Binding DownloadCommand}" Style="{StaticResource MainActionButtonStyle}">
+                                            <StackPanel>
+                                                <TextBlock HorizontalAlignment="Center" FontSize="17" FontWeight="SemiBold" Text="{Binding StartButtonText}" />
+                                                <TextBlock HorizontalAlignment="Center" Foreground="#FFF2DAC7" FontSize="12" Text="{Binding StartActionHintText}" />
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Height="42" Command="{Binding CancelDownloadCommand}" Content="{Binding CancelButtonText}" Style="{StaticResource SecondaryButtonStyle}" />
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.RowSpan="2"
+                      Panel.ZIndex="40"
+                      Visibility="{Binding IsUpdatePromptVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Border Background="#7C090B0E" />
+                    <Grid Width="620"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Opacity="0"
+                          RenderTransformOrigin="0.5,0.5">
+                        <Grid.RenderTransform>
+                            <ScaleTransform ScaleX="0.96" ScaleY="0.96" />
+                        </Grid.RenderTransform>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsUpdatePromptVisible}" Value="True">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                     From="0"
+                                                                     To="1"
+                                                                     Duration="0:0:0.18" />
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                                     From="0.96"
+                                                                     To="1"
+                                                                     Duration="0:0:0.2" />
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                                     From="0.96"
+                                                                     To="1"
+                                                                     Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Border Style="{StaticResource UpdateDialogBorderStyle}">
+                            <Grid Margin="26">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="18" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="18" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="18" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="18" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="48"
+                                                Height="48"
+                                                Background="#2B241D"
+                                                BorderBrush="#8D603D"
+                                                BorderThickness="1"
+                                                CornerRadius="16">
+                                            <Path HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Data="{StaticResource StartIconGeometry}"
+                                                  Style="{StaticResource HeaderIconPathStyle}"
+                                                  Stroke="{StaticResource AccentBrush}" />
+                                        </Border>
+                                        <StackPanel Margin="14,0,0,0">
+                                            <TextBlock Foreground="#FFD8A567"
+                                                       FontSize="11"
+                                                       FontWeight="SemiBold"
+                                                       Text="{Binding UpdatePromptTitle}" />
+                                            <TextBlock Margin="0,6,0,0"
+                                                       Style="{StaticResource SectionTitleStyle}"
+                                                       FontSize="24"
+                                                       Text="{Binding UpdatePromptSubtitle}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <Button Grid.Column="1"
+                                            Width="34"
+                                            Height="34"
+                                            Command="{Binding DismissUpdatePromptCommand}"
+                                            Content="&#x2715;"
+                                            Style="{StaticResource ChromeButtonStyle}" />
+                                </Grid>
+
+                                <TextBlock Grid.Row="2"
+                                           Foreground="{StaticResource MutedStrongBrush}"
+                                           FontSize="13"
+                                           LineHeight="22"
+                                           Text="{Binding UpdatePromptStatusText}"
+                                           TextWrapping="Wrap" />
+
+                                <Grid Grid.Row="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="14" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Padding="14" Style="{StaticResource MetricCardBorderStyle}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource SectionLabelStyle}" Text="{Binding UpdatePromptVersionLabel}" />
+                                            <TextBlock Margin="0,8,0,0"
+                                                       Style="{StaticResource MetricValueStyle}"
+                                                       FontSize="16"
+                                                       Text="{Binding UpdatePromptVersion}" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="2" Padding="14" Style="{StaticResource MetricCardBorderStyle}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource SectionLabelStyle}" Text="{Binding UpdatePromptDateLabel}" />
+                                            <TextBlock Margin="0,8,0,0"
+                                                       Style="{StaticResource MetricValueStyle}"
+                                                       FontSize="16"
+                                                       Text="{Binding UpdatePromptReleaseDate}" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+
+                                <Border Grid.Row="6"
+                                        Padding="16"
+                                        Background="#171A1F"
+                                        BorderBrush="#3B4048"
+                                        BorderThickness="1"
+                                        CornerRadius="18">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="12" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Style="{StaticResource SectionLabelStyle}"
+                                                   FontSize="13"
+                                                   Text="{Binding UpdatePromptNotesLabel}" />
+                                        <ScrollViewer Grid.Row="2"
+                                                      MaxHeight="220"
+                                                      VerticalScrollBarVisibility="Auto">
+                                            <TextBlock Foreground="{StaticResource MutedStrongBrush}"
+                                                       FontSize="13"
+                                                       LineHeight="22"
+                                                       Text="{Binding UpdatePromptChangelog}"
+                                                       TextWrapping="Wrap" />
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Border>
+
+                                <Grid Grid.Row="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="12" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock VerticalAlignment="Center"
+                                               Foreground="{StaticResource MutedStrongBrush}"
+                                               FontSize="12"
+                                               LineHeight="20"
+                                               Text="{Binding UpdatePromptActionHintText}"
+                                               TextWrapping="Wrap" />
+                                    <Button Grid.Column="1"
+                                            Width="116"
+                                            Height="42"
+                                            Command="{Binding DismissUpdatePromptCommand}"
+                                            Content="{Binding UpdatePromptDismissText}"
+                                            Style="{StaticResource SecondaryButtonStyle}" />
+                                    <Button Grid.Column="3"
+                                            Width="164"
+                                            Height="48"
+                                            Command="{Binding ExecuteUpdatePromptPrimaryCommand}"
+                                            Style="{StaticResource MainActionButtonStyle}">
+                                        <TextBlock HorizontalAlignment="Center"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Text="{Binding UpdatePromptPrimaryButtonText}" />
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+        </Border>
+    </Grid>
+    </Viewbox>
+</Window>

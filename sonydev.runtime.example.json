@@ -1,0 +1,10 @@
+{
+  "games_base_url": "https://example.invalid/bypasses/",
+  "updates_base_url": "https://example.invalid/SDBypass/update/",
+  "secret_key": "",
+  "package_id": "SonyDevBypass",
+  "package_title": "SonyDev Bypass",
+  "update_channel": "win-x64-beta",
+  "preferred_install_directory": "C:\\SonyDev\\Bypass",
+  "official_website": "https://sonydev.de/"
+}

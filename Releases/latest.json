@@ -1,0 +1,5 @@
+{
+  "version": "1.2.4-beta",
+  "release_date": "2026-03-15",
+  "changelog": "- Improved small-screen and laptop scaling so the launcher fits and remains readable\n- Refined DPI behavior and text clarity on compact displays\n- Updated the installer flow, translations, and release packaging for the new beta build"
+}

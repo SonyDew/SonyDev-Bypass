@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NoWarn>$(NoWarn);WFAC010</NoWarn>
+    <AssemblyName>SonyDevBypass</AssemblyName>
+    <RootNamespace>SonyDevBypass.App</RootNamespace>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <Title>SonyDev Bypass</Title>
+    <AssemblyTitle>SonyDev Bypass</AssemblyTitle>
+    <Description>Modern desktop client for catalog sync and recursive bypass downloads.</Description>
+    <Company>SonyDev</Company>
+    <Product>SonyDev Bypass</Product>
+    <Copyright>Copyright (c) 2026 SonyDev and contributors.</Copyright>
+    <Version>1.2.4-beta</Version>
+    <FileVersion>1.2.4.0</FileVersion>
+    <AssemblyVersion>1.2.4.0</AssemblyVersion>
+    <InformationalVersion>1.2.4-beta</InformationalVersion>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Languages\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\sonydev.runtime.example.json" Link="sonydev.runtime.example.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Velopack" Version="0.0.1298" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Reflection.AssemblyTitleAttribute">
+      <_Parameter1>SonyDev Bypass</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <Target Name="PatchWindowsAppHostMetadata" AfterTargets="Build"
+          Condition="Exists('$(MSBuildProjectDirectory)\..\Installer\patch-apphost-metadata.ps1') and Exists('$(MSBuildProjectDirectory)\..\Installer\rcedit-x64.exe') and Exists('$(TargetDir)$(AssemblyName).exe')">
+    <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\Installer\patch-apphost-metadata.ps1&quot; -ExePath &quot;$(TargetDir)$(AssemblyName).exe&quot;" />
+  </Target>
+
+</Project>
