@@ -2,6 +2,8 @@
 
 Open-source Windows desktop client for syncing a remote catalog, checking releases, and downloading packaged files through a single launcher UI.
 
+![SonyDev Bypass screenshot](https://sonydev.de/static/1.png)
+
 ## What This Repository Contains
 
 - The current WPF/.NET 8 desktop application
