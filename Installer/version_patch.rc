@@ -1,7 +1,7 @@
 ﻿#include <windows.h>
 1 VERSIONINFO
-FILEVERSION 1,2,5,0
-PRODUCTVERSION 1,2,5,0
+FILEVERSION 1,2,6,0
+PRODUCTVERSION 1,2,6,0
 FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
 FILEFLAGS 0x1L
@@ -18,11 +18,11 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "SonyDev\0"
             VALUE "FileDescription", "SonyDev Bypass\0"
-            VALUE "FileVersion", "1.2.5.0\0"
+            VALUE "FileVersion", "1.2.6.0\0"
             VALUE "InternalName", "SonyDevBypass.exe\0"
             VALUE "OriginalFilename", "SonyDevBypass.exe\0"
             VALUE "ProductName", "SonyDev Bypass\0"
-            VALUE "ProductVersion", "1.2.5-beta\0"
+            VALUE "ProductVersion", "1.2.6-beta\0"
         END
     END
     BLOCK "VarFileInfo"

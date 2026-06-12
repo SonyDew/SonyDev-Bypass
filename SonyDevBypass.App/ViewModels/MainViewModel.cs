@@ -16,8 +16,8 @@ namespace SonyDevBypass.App.ViewModels;
 public sealed class MainViewModel : ObservableObject, IDisposable
 {
     private const string DiscordInviteUrl = "https://discord.gg/6QBqSTQErK";
-    private const string InternalVersion = "1.2.5-beta";
-    private const string DisplayVersion = "1.2.5 beta";
+    private const string InternalVersion = "1.2.6-beta";
+    private const string DisplayVersion = "1.2.6 beta";
     private const string ReleaseDate = "2026-06-12";
 
     private readonly SonyDevApiClient _apiClient;

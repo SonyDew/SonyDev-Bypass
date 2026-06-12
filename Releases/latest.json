@@ -1,5 +1,5 @@
 {
-  "version": "1.2.5-beta",
+  "version": "1.2.6-beta",
   "release_date": "2026-06-12",
-  "changelog": "- Restored live catalog access after the protected backend path changed\n- Excluded sonydev-package.json from game downloads because it is service metadata for SonyDev Manifest\n- Updated the launcher package and OTA metadata for the new beta build"
+  "changelog": "- Removed the shared secret from the official client release path so no backend key is bundled into the app\n- Switched the official catalog and update flow to public read-only endpoints prepared for the launcher\n- Kept sonydev-package.json excluded from SonyDev Bypass downloads and refreshed the beta package metadata"
 }

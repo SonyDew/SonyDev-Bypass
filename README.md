@@ -49,6 +49,7 @@ The source code is published so users can inspect the application, verify what i
 Copy [`sonydev.runtime.example.json`](sonydev.runtime.example.json) to `sonydev.runtime.json` and replace the placeholder endpoints with your own.
 
 The file is intentionally ignored by git.
+Release builds do not auto-bundle your local `sonydev.runtime.json`, so copy it next to the published app only when you explicitly intend to ship that config.
 
 ### 3. Build the app
 
@@ -66,11 +67,14 @@ dotnet publish .\SonyDevBypass.App\SonyDevBypass.App.csproj `
   -o .\artifacts\publish
 ```
 
+If you want the published app to target a real backend, copy an explicit runtime file into the publish folder yourself, for example `Copy-Item .\sonydev.runtime.json .\artifacts\publish\sonydev.runtime.json`. This is now a manual step on purpose.
+
 ## Runtime Configuration
 
 The app reads runtime settings from `sonydev.runtime.json`. It also supports these environment variables:
 
 - `SONYDEV_RUNTIME_CONFIG`
+- `SONYDEV_CATALOG_API_URL`
 - `SONYDEV_GAMES_BASE_URL`
 - `SONYDEV_UPDATES_BASE_URL`
 - `SONYDEV_SECRET_KEY`
@@ -81,12 +85,13 @@ The app reads runtime settings from `sonydev.runtime.json`. It also supports the
 - `SONYDEV_OFFICIAL_WEBSITE`
 
 Default values in the public repository point to `example.invalid` on purpose so the open-source build cannot accidentally target private infrastructure.
+For public open-source releases, do not ship a real shared secret in the client runtime config. Prefer a public read-only catalog/update endpoint or a real per-user server-side auth flow.
 
 ## Self-Hosting
 
 The app expects:
 
-- a catalog endpoint that exposes directory listings for downloadable files
+- a catalog endpoint exposed either through `catalog_api_url` or a legacy directory listing under `games_base_url`
 - an update endpoint that serves `latest.json`, Velopack metadata, and setup packages
 - optional header-based protection if you want to require a shared secret
 
@@ -105,7 +110,7 @@ vpk pack `
   --channel win-x64-beta `
   --runtime win-x64 `
   --packId SonyDevBypass `
-  --packVersion 1.2.5-beta `
+  --packVersion 1.2.6-beta `
   --packDir .\artifacts\publish `
   --mainExe SonyDevBypass.exe `
   --packTitle "SonyDev Bypass" `
