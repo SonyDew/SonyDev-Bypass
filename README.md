@@ -105,7 +105,7 @@ vpk pack `
   --channel win-x64-beta `
   --runtime win-x64 `
   --packId SonyDevBypass `
-  --packVersion 1.2.4-beta `
+  --packVersion 1.2.5-beta `
   --packDir .\artifacts\publish `
   --mainExe SonyDevBypass.exe `
   --packTitle "SonyDev Bypass" `

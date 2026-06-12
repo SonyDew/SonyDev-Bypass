@@ -29,8 +29,9 @@ public sealed class SonyDevApiConfiguration
             ? "https://sonydev.de/"
             : options.OfficialWebsite.Trim();
 
-        GamesBaseUri = CreateOptionalUri(options.GamesBaseUrl);
-        UpdatesBaseUri = CreateOptionalUri(options.UpdatesBaseUrl);
+        CatalogApiUri = CreateOptionalEndpointUri(options.CatalogApiUrl);
+        GamesBaseUri = CreateOptionalBaseUri(options.GamesBaseUrl);
+        UpdatesBaseUri = CreateOptionalBaseUri(options.UpdatesBaseUrl);
         LatestUpdateUri = UpdatesBaseUri is null ? null : new Uri(UpdatesBaseUri, "latest.json");
         SetupInstallerUri = UpdatesBaseUri is null ? null : new Uri(UpdatesBaseUri, $"{PackageId}-{UpdateChannel}-Setup.exe");
     }
@@ -47,6 +48,8 @@ public sealed class SonyDevApiConfiguration
 
     public string OfficialWebsite { get; }
 
+    public Uri? CatalogApiUri { get; }
+
     public Uri? GamesBaseUri { get; }
 
     public Uri? UpdatesBaseUri { get; }
@@ -57,7 +60,11 @@ public sealed class SonyDevApiConfiguration
 
     public bool HasSecretKey => !string.IsNullOrWhiteSpace(SecretKey);
 
-    public bool HasCatalogConfiguration => GamesBaseUri is not null && !IsPlaceholderUri(GamesBaseUri);
+    public bool HasCatalogApiConfiguration => CatalogApiUri is not null && !IsPlaceholderUri(CatalogApiUri);
+
+    public bool HasCatalogConfiguration =>
+        HasCatalogApiConfiguration ||
+        (GamesBaseUri is not null && !IsPlaceholderUri(GamesBaseUri));
 
     public bool HasUpdateConfiguration => UpdatesBaseUri is not null && !IsPlaceholderUri(UpdatesBaseUri);
 
@@ -82,7 +89,7 @@ public sealed class SonyDevApiConfiguration
 
     public string GetCatalogConfigurationMessage()
     {
-        return $"Remote catalog is not configured. Create {RuntimeConfigFileName} from {ExampleConfigFileName} and set games_base_url.";
+        return $"Remote catalog is not configured. Create {RuntimeConfigFileName} from {ExampleConfigFileName} and set catalog_api_url or games_base_url.";
     }
 
     public string GetUpdateConfigurationMessage()
@@ -92,7 +99,8 @@ public sealed class SonyDevApiConfiguration
 
     public void EnsureCatalogConfigured()
     {
-        if (!HasCatalogConfiguration || GamesBaseUri is null)
+        if (!HasCatalogConfiguration ||
+            (!HasCatalogApiConfiguration && GamesBaseUri is null))
         {
             throw new InvalidOperationException(GetCatalogConfigurationMessage());
         }
@@ -135,6 +143,7 @@ public sealed class SonyDevApiConfiguration
     private static void ApplyEnvironmentOverrides(SonyDevRuntimeOptions options)
     {
         options.GamesBaseUrl = GetEnvironmentOverride("SONYDEV_GAMES_BASE_URL") ?? options.GamesBaseUrl;
+        options.CatalogApiUrl = GetEnvironmentOverride("SONYDEV_CATALOG_API_URL") ?? options.CatalogApiUrl;
         options.UpdatesBaseUrl = GetEnvironmentOverride("SONYDEV_UPDATES_BASE_URL") ?? options.UpdatesBaseUrl;
         options.SecretKey = GetEnvironmentOverride("SONYDEV_SECRET_KEY") ?? options.SecretKey;
         options.PackageId = GetEnvironmentOverride("SONYDEV_PACKAGE_ID") ?? options.PackageId;
@@ -150,7 +159,22 @@ public sealed class SonyDevApiConfiguration
         return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
     }
 
-    private static Uri? CreateOptionalUri(string? value)
+    private static Uri? CreateOptionalBaseUri(string? value)
+    {
+        var uri = CreateOptionalEndpointUri(value);
+        if (uri is null)
+        {
+            return null;
+        }
+
+        var normalized = uri.AbsoluteUri.EndsWith("/", StringComparison.Ordinal)
+            ? uri.AbsoluteUri
+            : $"{uri.AbsoluteUri}/";
+
+        return new Uri(normalized, UriKind.Absolute);
+    }
+
+    private static Uri? CreateOptionalEndpointUri(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -163,11 +187,7 @@ public sealed class SonyDevApiConfiguration
             throw new InvalidOperationException($"Invalid runtime configuration URL: {value}");
         }
 
-        var normalized = uri.AbsoluteUri.EndsWith("/", StringComparison.Ordinal)
-            ? uri.AbsoluteUri
-            : $"{uri.AbsoluteUri}/";
-
-        return new Uri(normalized, UriKind.Absolute);
+        return uri;
     }
 
     private static bool IsPlaceholderUri(Uri uri)
@@ -177,6 +197,9 @@ public sealed class SonyDevApiConfiguration
 
     private sealed class SonyDevRuntimeOptions
     {
+        [JsonPropertyName("catalog_api_url")]
+        public string CatalogApiUrl { get; set; } = "https://example.invalid/SDBypass/catalog.php";
+
         [JsonPropertyName("games_base_url")]
         public string GamesBaseUrl { get; set; } = "https://example.invalid/bypasses/";
 

@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using SonyDevBypass.App.Models;
 
@@ -9,9 +10,15 @@ namespace SonyDevBypass.App.Services;
 
 public sealed class SonyDevApiClient : IDisposable
 {
+    private const string PackageMetadataFileName = "sonydev-package.json";
+
     private static readonly Regex IndexEntryRegex = new(
         "<a href=\"(?<href>[^\"]+)\">.*?</a>\\s+\\d{2}-[A-Za-z]{3}-\\d{4}\\s+\\d{2}:\\d{2}\\s+(?<size>-|\\d+)",
         RegexOptions.Compiled | RegexOptions.Multiline);
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
 
     private readonly HttpClient _httpClient;
     private readonly SonyDevApiConfiguration _configuration;
@@ -40,6 +47,12 @@ public sealed class SonyDevApiClient : IDisposable
     public async Task<IReadOnlyList<string>> GetGameNamesAsync(CancellationToken cancellationToken = default)
     {
         _configuration.EnsureCatalogConfigured();
+
+        if (_configuration.HasCatalogApiConfiguration)
+        {
+            return await GetGameNamesFromCatalogApiAsync(cancellationToken);
+        }
+
         var entries = await ReadDirectoryEntriesAsync(_configuration.GamesBaseUri!, cancellationToken);
         return entries
             .Where(entry => entry.IsDirectory)
@@ -65,11 +78,19 @@ public sealed class SonyDevApiClient : IDisposable
         CancellationToken cancellationToken = default)
     {
         _configuration.EnsureCatalogConfigured();
-        var gameUri = new Uri(_configuration.GamesBaseUri!, $"{Uri.EscapeDataString(gameName)}/");
         var remoteFiles = new List<RemoteFile>();
 
-        await CollectFilesAsync(gameUri, string.Empty, remoteFiles, cancellationToken);
+        if (_configuration.HasCatalogApiConfiguration)
+        {
+            remoteFiles.AddRange(await GetGameFilesFromCatalogApiAsync(gameName, cancellationToken));
+        }
+        else
+        {
+            var gameUri = new Uri(_configuration.GamesBaseUri!, $"{Uri.EscapeDataString(gameName)}/");
+            await CollectFilesAsync(gameUri, string.Empty, remoteFiles, cancellationToken);
+        }
 
+        remoteFiles.RemoveAll(static file => IsPackageMetadataPath(file.RelativePath));
         if (remoteFiles.Count == 0)
         {
             throw new InvalidOperationException("No files were found in the selected game folder.");
@@ -140,6 +161,61 @@ public sealed class SonyDevApiClient : IDisposable
         _httpClient.Dispose();
     }
 
+    private async Task<IReadOnlyList<string>> GetGameNamesFromCatalogApiAsync(CancellationToken cancellationToken)
+    {
+        using var response = await _httpClient.GetAsync(_configuration.CatalogApiUri!, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+        var payload = await JsonSerializer.DeserializeAsync<CatalogGamesResponse>(stream, JsonOptions, cancellationToken);
+        if (payload is null)
+        {
+            throw new InvalidOperationException("Catalog API returned an empty response.");
+        }
+
+        if (!payload.Success)
+        {
+            throw new InvalidOperationException(payload.Error ?? "Catalog API request failed.");
+        }
+
+        return (payload.Games ?? [])
+            .Where(name => !string.IsNullOrWhiteSpace(name))
+            .OrderBy(name => name, StringComparer.CurrentCultureIgnoreCase)
+            .ToArray();
+    }
+
+    private async Task<IReadOnlyList<RemoteFile>> GetGameFilesFromCatalogApiAsync(string gameName, CancellationToken cancellationToken)
+    {
+        var requestUri = AppendQueryParameter(_configuration.CatalogApiUri!, "game", gameName);
+        using var response = await _httpClient.GetAsync(requestUri, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+        var payload = await JsonSerializer.DeserializeAsync<CatalogManifestResponse>(stream, JsonOptions, cancellationToken);
+        if (payload is null)
+        {
+            throw new InvalidOperationException("Catalog API returned an empty manifest.");
+        }
+
+        if (!payload.Success)
+        {
+            throw new InvalidOperationException(payload.Error ?? "Catalog API manifest request failed.");
+        }
+
+        return (payload.Files ?? [])
+            .Where(file =>
+                !string.IsNullOrWhiteSpace(file.Path) &&
+                !string.IsNullOrWhiteSpace(file.Url) &&
+                !IsPackageMetadataPath(file.Path))
+            .Select(file => new RemoteFile
+            {
+                RelativePath = file.Path!,
+                Uri = new Uri(file.Url!, UriKind.Absolute),
+                Size = file.Size
+            })
+            .ToArray();
+    }
+
     private async Task CollectFilesAsync(
         Uri directoryUri,
         string relativePath,
@@ -159,6 +235,11 @@ public sealed class SonyDevApiClient : IDisposable
             if (entry.IsDirectory)
             {
                 await CollectFilesAsync(entry.Uri, entryPath, files, cancellationToken);
+                continue;
+            }
+
+            if (IsPackageMetadataPath(entryPath))
+            {
                 continue;
             }
 
@@ -231,5 +312,63 @@ public sealed class SonyDevApiClient : IDisposable
             : 0d;
 
         return Math.Clamp((completedFiles + fileFraction) / totalFiles, 0d, 1d);
+    }
+
+    private static Uri AppendQueryParameter(Uri baseUri, string key, string value)
+    {
+        var builder = new UriBuilder(baseUri);
+        var prefix = string.IsNullOrWhiteSpace(builder.Query)
+            ? string.Empty
+            : $"{builder.Query.TrimStart('?')}&";
+        builder.Query = $"{prefix}{Uri.EscapeDataString(key)}={Uri.EscapeDataString(value)}";
+        return builder.Uri;
+    }
+
+    private static bool IsPackageMetadataPath(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return false;
+        }
+
+        var normalized = path.Replace('\\', '/');
+        var fileName = normalized.Split('/').LastOrDefault();
+        return string.Equals(fileName, PackageMetadataFileName, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private sealed class CatalogGamesResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; init; }
+
+        [JsonPropertyName("games")]
+        public string[]? Games { get; init; }
+
+        [JsonPropertyName("error")]
+        public string? Error { get; init; }
+    }
+
+    private sealed class CatalogManifestResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; init; }
+
+        [JsonPropertyName("files")]
+        public CatalogManifestFile[]? Files { get; init; }
+
+        [JsonPropertyName("error")]
+        public string? Error { get; init; }
+    }
+
+    private sealed class CatalogManifestFile
+    {
+        [JsonPropertyName("path")]
+        public string? Path { get; init; }
+
+        [JsonPropertyName("size")]
+        public long Size { get; init; }
+
+        [JsonPropertyName("url")]
+        public string? Url { get; init; }
     }
 }

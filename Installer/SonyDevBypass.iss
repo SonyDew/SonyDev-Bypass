@@ -1,5 +1,5 @@
 #define AppName "SonyDev Bypass"
-#define AppVersion "1.2.4-beta"
+#define AppVersion "1.2.5-beta"
 #define AppPublisher "SonyDev"
 #define AppExeName "SonyDevBypass.exe"
 #define InstallDir "C:\SonyDev\Bypass"

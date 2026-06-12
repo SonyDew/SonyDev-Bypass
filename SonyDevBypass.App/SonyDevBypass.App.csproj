@@ -18,10 +18,10 @@
     <Company>SonyDev</Company>
     <Product>SonyDev Bypass</Product>
     <Copyright>Copyright (c) 2026 SonyDev and contributors.</Copyright>
-    <Version>1.2.4-beta</Version>
-    <FileVersion>1.2.4.0</FileVersion>
-    <AssemblyVersion>1.2.4.0</AssemblyVersion>
-    <InformationalVersion>1.2.4-beta</InformationalVersion>
+    <Version>1.2.5-beta</Version>
+    <FileVersion>1.2.5.0</FileVersion>
+    <AssemblyVersion>1.2.5.0</AssemblyVersion>
+    <InformationalVersion>1.2.5-beta</InformationalVersion>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
   </PropertyGroup>
 
@@ -30,6 +30,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\sonydev.runtime.example.json" Link="sonydev.runtime.example.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\sonydev.runtime.json" Link="sonydev.runtime.json" Condition="Exists('..\sonydev.runtime.json')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

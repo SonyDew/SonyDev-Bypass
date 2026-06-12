@@ -1,4 +1,5 @@
 {
+  "catalog_api_url": "https://example.invalid/SDBypass/catalog.php",
   "games_base_url": "https://example.invalid/bypasses/",
   "updates_base_url": "https://example.invalid/SDBypass/update/",
   "secret_key": "",
